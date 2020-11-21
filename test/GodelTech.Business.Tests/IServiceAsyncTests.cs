@@ -9,11 +9,11 @@ namespace GodelTech.Business.Tests
     // ReSharper disable once InconsistentNaming
     public class IServiceAsyncTests
     {
-        private readonly Mock<IService<FakeDto, int, IFakeAddDto>> _mockService;
+        private readonly Mock<IService<FakeDto, IFakeAddDto, int>> _mockService;
 
         public IServiceAsyncTests()
         {
-            _mockService = new Mock<IService<FakeDto, int, IFakeAddDto>>(MockBehavior.Strict);
+            _mockService = new Mock<IService<FakeDto, IFakeAddDto, int>>(MockBehavior.Strict);
         }
 
         [Fact]

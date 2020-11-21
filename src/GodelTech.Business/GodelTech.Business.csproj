@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>GodelTech.Business</PackageId>
-    <VersionPrefix>1.0.0-rc.1</VersionPrefix>
+    <VersionPrefix>1.0.0</VersionPrefix>
     <Authors>v.rodchenko</Authors>
     <Company>Godel Technologies</Company>
     <Description>Library for services in business layer.</Description>
@@ -29,7 +29,8 @@
 
   <ItemGroup>
     <!-- Source Link needs this -->
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+    <PackageReference Include="GodelTech.Data" Version="3.0.1" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>

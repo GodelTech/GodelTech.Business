@@ -1,7 +1,22 @@
-﻿namespace GodelTech.Business.Tests.Fakes
+﻿using GodelTech.Data;
+using System;
+using System.Diagnostics.CodeAnalysis;
+
+namespace GodelTech.Business.Tests.Fakes
 {
-    public class FakeEntity
+    [ExcludeFromCodeCoverage]
+    public class FakeEntity : IEntity<int>
     {
-        // this is fake model and it is ok that it is empty
+        public int Id { get; set; }
+
+        public bool Equals(IEntity<int> x, IEntity<int> y)
+        {
+            throw new Exception("Equals is fake method!");
+        }
+
+        public int GetHashCode(IEntity<int> obj)
+        {
+            throw new Exception("GetHashCode is fake method!");
+        }
     }
 }
