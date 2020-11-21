@@ -7,10 +7,10 @@ namespace GodelTech.Business
     /// Interface of service for business layer.
     /// </summary>
     /// <typeparam name="TDto">The type of the T data transfer object.</typeparam>
-    /// <typeparam name="TType">The type of the T type.</typeparam>
     /// <typeparam name="TAddDto">The type of the T add data transfer object.</typeparam>
-    public interface IService<TDto, TType, TAddDto>
-        where TDto : class, IDto<TType>
+    /// <typeparam name="TType">The type of the T type.</typeparam>
+    public interface IService<TDto, TAddDto, TType>
+        where TDto : class
         where TAddDto : class
     {
         /// <summary>
