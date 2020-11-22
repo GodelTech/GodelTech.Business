@@ -18,19 +18,28 @@ namespace GodelTech.Business
         where TDto : class
         where TAddDto : class
     {
-        private readonly TUnitOfWork _unitOfWork;
-        private readonly IBusinessMapper _businessMapper;
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="Service"/> class.
+        /// Initializes a new instance of the <see cref="Service{TUnitOfWork, IBusinessMapper}"/> class.
         /// </summary>
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="businessMapper">The business mapper.</param>
         public Service(TUnitOfWork unitOfWork, IBusinessMapper businessMapper)
         {
-            _unitOfWork = unitOfWork;
-            _businessMapper = businessMapper;
+            UnitOfWork = unitOfWork;
+            BusinessMapper = businessMapper;
         }
+
+        /// <summary>
+        /// Gets the unit of work.
+        /// </summary>
+        /// <value>The unit of work.</value>
+        protected TUnitOfWork UnitOfWork { get; }
+
+        /// <summary>
+        /// Gets the business mapper.
+        /// </summary>
+        /// <value>The business mapper.</value>
+        protected IBusinessMapper BusinessMapper { get; }
 
         /// <summary>
         /// Asynchronously gets data transfer object models of type T.
@@ -38,7 +47,7 @@ namespace GodelTech.Business
         /// <returns><cref>Task{IList{TDto}}</cref>.</returns>
         public virtual async Task<IList<TDto>> GetListAsync()
         {
-            return await _unitOfWork
+            return await UnitOfWork
                 .GetRepository<TEntity, TType>()
                 .GetListAsync<TDto, TEntity, TType>(null);
         }
@@ -51,7 +60,7 @@ namespace GodelTech.Business
         /// <returns><cref>Task{TDto}</cref>.</returns>
         public virtual async Task<TDto> GetAsync(TType id)
         {
-            return await _unitOfWork
+            return await UnitOfWork
                 .GetRepository<TEntity, TType>()
                 .GetAsync<TDto, TEntity, TType>(id);
         }
@@ -63,15 +72,15 @@ namespace GodelTech.Business
         /// <returns><cref>TDto</cref>.</returns>
         public virtual async Task<TDto> AddAsync(TAddDto item)
         {
-            var entity = _businessMapper.Map<TEntity>(item);
+            var entity = BusinessMapper.Map<TEntity>(item);
 
-            entity = await _unitOfWork
+            entity = await UnitOfWork
                 .GetRepository<TEntity, TType>()
                 .InsertAsync(entity);
 
-            await _unitOfWork.CommitAsync();
+            await UnitOfWork.CommitAsync();
 
-            return _businessMapper.Map<TDto>(entity);
+            return BusinessMapper.Map<TDto>(entity);
         }
 
         /// <summary>
@@ -82,22 +91,22 @@ namespace GodelTech.Business
         /// <returns>TDto.</returns>
         public virtual async Task<TDto> EditAsync(TType id, TDto item)
         {
-            var entity = await _unitOfWork
+            var entity = await UnitOfWork
                 .GetRepository<TEntity, TType>()
                 .GetAsync(id);
 
             if (entity != null)
             {
-                _businessMapper.Map(item, entity);
+                BusinessMapper.Map(item, entity);
 
-                entity = _unitOfWork
+                entity = UnitOfWork
                     .GetRepository<TEntity, TType>()
                     .Update(entity);
 
-                await _unitOfWork.CommitAsync();
+                await UnitOfWork.CommitAsync();
             }
 
-            return _businessMapper.Map<TDto>(entity);
+            return BusinessMapper.Map<TDto>(entity);
         }
 
         /// <summary>
@@ -106,11 +115,11 @@ namespace GodelTech.Business
         /// <param name="id">The identifier.</param>
         public virtual async Task DeleteAsync(TType id)
         {
-            _unitOfWork
+            UnitOfWork
                 .GetRepository<TEntity, TType>()
                 .Delete(id);
 
-            await _unitOfWork.CommitAsync();
+            await UnitOfWork.CommitAsync();
         }
     }
 }
