@@ -35,7 +35,7 @@ namespace GodelTech.Business.Tests
                 .Setup(m => m.GetListAsync<FakeDto>(It.IsAny<QueryParameters<FakeEntity, int>>()))
                 .ReturnsAsync(new List<FakeDto> { dto });
 
-            var service = new Service<IUnitOfWork, FakeEntity, FakeDto, FakeAddDto, int>(_mockUnitOfWork.Object, _mockBusinessMapper.Object);
+            var service = new Service<IUnitOfWork, FakeEntity, FakeDto, int>(_mockUnitOfWork.Object, _mockBusinessMapper.Object);
 
             // Act
             var result = await service.GetListAsync();
@@ -56,7 +56,7 @@ namespace GodelTech.Business.Tests
                 .Setup(m => m.GetAsync<FakeDto>(It.IsAny<QueryParameters<FakeEntity, int>>()))
                 .ReturnsAsync(dto);
 
-            var service = new Service<IUnitOfWork, FakeEntity, FakeDto, FakeAddDto, int>(_mockUnitOfWork.Object, _mockBusinessMapper.Object);
+            var service = new Service<IUnitOfWork, FakeEntity, FakeDto, int>(_mockUnitOfWork.Object, _mockBusinessMapper.Object);
 
             // Act
             var result = await service.GetAsync(1);
@@ -91,7 +91,7 @@ namespace GodelTech.Business.Tests
                 .Setup(m => m.CommitAsync())
                 .ReturnsAsync(1);
 
-            var service = new Service<IUnitOfWork, FakeEntity, FakeDto, FakeAddDto, int>(_mockUnitOfWork.Object, _mockBusinessMapper.Object);
+            var service = new Service<IUnitOfWork, FakeEntity, FakeDto, int>(_mockUnitOfWork.Object, _mockBusinessMapper.Object);
 
             // Act
             var result = await service.AddAsync(addDto);
@@ -107,10 +107,11 @@ namespace GodelTech.Business.Tests
         {
             // Arrange
             var dto = new FakeDto();
+            var editDto = new FakeEditDto();
             var entity = new FakeEntity();
 
             _mockBusinessMapper
-                .Setup(m => m.Map(It.IsAny<FakeDto>(), It.IsAny<FakeEntity>()))
+                .Setup(m => m.Map(It.IsAny<FakeEditDto>(), It.IsAny<FakeEntity>()))
                 .Returns(entity);
 
             _mockBusinessMapper
@@ -129,10 +130,10 @@ namespace GodelTech.Business.Tests
                 .Setup(m => m.CommitAsync())
                 .ReturnsAsync(1);
 
-            var service = new Service<IUnitOfWork, FakeEntity, FakeDto, FakeAddDto, int>(_mockUnitOfWork.Object, _mockBusinessMapper.Object);
+            var service = new Service<IUnitOfWork, FakeEntity, FakeDto, int>(_mockUnitOfWork.Object, _mockBusinessMapper.Object);
 
             // Act
-            var result = await service.EditAsync(1, dto);
+            var result = await service.EditAsync(1, editDto);
 
             // Assert
             _mockUnitOfWork.VerifyAll();
@@ -157,7 +158,7 @@ namespace GodelTech.Business.Tests
                 .Setup(m => m.CommitAsync())
                 .ReturnsAsync(1);
 
-            var service = new Service<IUnitOfWork, FakeEntity, FakeDto, FakeAddDto, int>(_mockUnitOfWork.Object, _mockBusinessMapper.Object);
+            var service = new Service<IUnitOfWork, FakeEntity, FakeDto, int>(_mockUnitOfWork.Object, _mockBusinessMapper.Object);
 
             // Act
             await service.DeleteAsync(1);

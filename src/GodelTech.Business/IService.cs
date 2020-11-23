@@ -7,11 +7,9 @@ namespace GodelTech.Business
     /// Interface of service for business layer.
     /// </summary>
     /// <typeparam name="TDto">The type of the T data transfer object.</typeparam>
-    /// <typeparam name="TAddDto">The type of the T add data transfer object.</typeparam>
     /// <typeparam name="TType">The type of the T type.</typeparam>
-    public interface IService<TDto, TAddDto, TType>
+    public interface IService<TDto, TType>
         where TDto : class
-        where TAddDto : class
     {
         /// <summary>
         /// Asynchronously gets data transfer object models of type T.
@@ -30,17 +28,21 @@ namespace GodelTech.Business
         /// <summary>
         /// Asynchronously adds data transfer object.
         /// </summary>
+        /// <typeparam name="TAddDto">The type of the T add data transfer object.</typeparam>
         /// <param name="item">The item.</param>
         /// <returns><cref>TDto</cref>.</returns>
-        Task<TDto> AddAsync(TAddDto item);
+        Task<TDto> AddAsync<TAddDto>(TAddDto item)
+            where TAddDto : class;
 
         /// <summary>
         /// Asynchronously updates data transfer object.
         /// </summary>
+        /// <typeparam name="TEditDto">The type of the T edit data transfer object.</typeparam>
         /// <param name="id">The identifier.</param>
         /// <param name="item">The item.</param>
         /// <returns>TDto.</returns>
-        Task<TDto> EditAsync(TType id, TDto item);
+        Task<TDto> EditAsync<TEditDto>(TType id, TEditDto item)
+            where TEditDto : class;
 
         /// <summary>
         /// Asynchronously deletes the specified data transfer object.

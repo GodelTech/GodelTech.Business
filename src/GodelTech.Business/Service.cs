@@ -4,19 +4,18 @@ using System.Threading.Tasks;
 
 namespace GodelTech.Business
 {
+#pragma warning disable S2436
     /// <summary>
     /// Service for business layer.
     /// </summary>
     /// <typeparam name="TUnitOfWork">The type of the T unit of work.</typeparam>
     /// <typeparam name="TEntity">The type of the T entity.</typeparam>
     /// <typeparam name="TDto">The type of the T data transfer object.</typeparam>
-    /// <typeparam name="TAddDto">The type of the T add data transfer object.</typeparam>
     /// <typeparam name="TType">The type of the T type.</typeparam>
-    public class Service<TUnitOfWork, TEntity, TDto, TAddDto, TType> : IService<TDto, TAddDto, TType>
+    public class Service<TUnitOfWork, TEntity, TDto, TType> : IService<TDto, TType>
         where TUnitOfWork : IUnitOfWork
         where TEntity : class, IEntity<TType>
         where TDto : class
-        where TAddDto : class
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Service{TUnitOfWork, IBusinessMapper}"/> class.
@@ -68,9 +67,11 @@ namespace GodelTech.Business
         /// <summary>
         /// Asynchronously adds data transfer object.
         /// </summary>
+        /// <typeparam name="TAddDto">The type of the T add data transfer object.</typeparam>
         /// <param name="item">The item.</param>
         /// <returns><cref>TDto</cref>.</returns>
-        public virtual async Task<TDto> AddAsync(TAddDto item)
+        public virtual async Task<TDto> AddAsync<TAddDto>(TAddDto item)
+            where TAddDto : class
         {
             var entity = BusinessMapper.Map<TEntity>(item);
 
@@ -86,10 +87,12 @@ namespace GodelTech.Business
         /// <summary>
         /// Asynchronously updates data transfer object.
         /// </summary>
+        /// <typeparam name="TEditDto">The type of the T edit data transfer object.</typeparam>
         /// <param name="id">The identifier.</param>
         /// <param name="item">The item.</param>
         /// <returns>TDto.</returns>
-        public virtual async Task<TDto> EditAsync(TType id, TDto item)
+        public virtual async Task<TDto> EditAsync<TEditDto>(TType id, TEditDto item)
+            where TEditDto : class
         {
             var entity = await UnitOfWork
                 .GetRepository<TEntity, TType>()
@@ -122,4 +125,5 @@ namespace GodelTech.Business
             await UnitOfWork.CommitAsync();
         }
     }
+#pragma warning restore S2436
 }
