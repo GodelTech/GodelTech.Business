@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace GodelTech.Business
 {
+#pragma warning disable S2436
     /// <summary>
     /// Service for business layer.
     /// </summary>
@@ -124,4 +125,5 @@ namespace GodelTech.Business
             await UnitOfWork.CommitAsync();
         }
     }
+#pragma warning restore S2436
 }
