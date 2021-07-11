@@ -1,10 +1,8 @@
 ﻿using GodelTech.Data;
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace GodelTech.Business.Tests.Fakes
 {
-    [ExcludeFromCodeCoverage]
     public class FakeEntity : IEntity<int>
     {
         public int Id { get; set; }

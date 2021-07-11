@@ -1,7 +1,7 @@
 ﻿namespace GodelTech.Business.Tests.Fakes
 {
-    public class FakeEditDto
+    public class FakeEditDto : IDto<int>
     {
-        // this is fake model and it is ok that it is empty
+        public int Id { get; set; }
     }
 }
