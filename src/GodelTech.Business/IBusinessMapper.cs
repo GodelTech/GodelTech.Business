@@ -6,21 +6,22 @@
     public interface IBusinessMapper
     {
         /// <summary>
-        /// Method to map from a source object using the provided mapping engine.
+        /// Execute a mapping from the source object to a new destination object.
         /// </summary>
-        /// <typeparam name="TDestination">Destination type</typeparam>
-        /// <param name="source">Object source</param>
-        /// <returns>Destination item</returns>
-        TDestination Map<TDestination>(object source);
+        /// <typeparam name="TSource">Source type to use, regardless of the runtime type</typeparam>
+        /// <typeparam name="TDestination">Destination type to create</typeparam>
+        /// <param name="source">Source object to map from</param>
+        /// <returns>Mapped destination object</returns>
+        TDestination Map<TSource, TDestination>(TSource source);
 
         /// <summary>
-        /// Method to map from a source to destination using the provided mapping engine.
+        /// Execute a mapping from the source object to the existing destination object.
         /// </summary>
-        /// <typeparam name="TSource">Source type</typeparam>
+        /// <typeparam name="TSource">Source type to use</typeparam>
         /// <typeparam name="TDestination">Destination type</typeparam>
-        /// <param name="source">Source item</param>
-        /// <param name="destination">Destination item</param>
-        /// <returns>Destination item</returns>
+        /// <param name="source">Source object to map from</param>
+        /// <param name="destination">Destination object to map into</param>
+        /// <returns>The mapped destination object, same instance as the <paramref name="destination" /> object</returns>
         TDestination Map<TSource, TDestination>(TSource source, TDestination destination);
     }
 }

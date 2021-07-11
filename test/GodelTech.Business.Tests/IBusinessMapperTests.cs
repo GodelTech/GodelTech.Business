@@ -4,7 +4,6 @@ using Xunit;
 
 namespace GodelTech.Business.Tests
 {
-    // ReSharper disable once InconsistentNaming
     public class IBusinessMapperTests
     {
         private readonly Mock<IBusinessMapper> _mockBusinessMapper;
@@ -15,29 +14,39 @@ namespace GodelTech.Business.Tests
         }
 
         [Fact]
-        public void Map_ReturnDestination()
+        public void MapSource_ReturnsDestination()
         {
             // Arrange
             var entity = new FakeEntity();
             var dto = new FakeDto();
 
-            _mockBusinessMapper.Setup(m => m.Map<FakeDto>(entity)).Returns(dto);
+            _mockBusinessMapper
+                .Setup(x => x.Map<FakeEntity, FakeDto>(entity))
+                .Returns(dto);
 
-            // Act & Assert
-            Assert.Equal(dto, _mockBusinessMapper.Object.Map<FakeDto>(entity));
+            // Act
+            var result = _mockBusinessMapper.Object.Map<FakeEntity, FakeDto>(entity);
+
+            // Assert
+            Assert.Equal(dto, result);
         }
 
         [Fact]
-        public void MapSourceToDestination_ReturnDestination()
+        public void MapSourceToDestination_ReturnsDestination()
         {
             // Arrange
             var entity = new FakeEntity();
             var dto = new FakeDto();
 
-            _mockBusinessMapper.Setup(m => m.Map(entity, dto)).Returns(dto);
+            _mockBusinessMapper
+                .Setup(x => x.Map(entity, dto))
+                .Returns(dto);
 
-            // Act & Assert
-            Assert.Equal(dto, _mockBusinessMapper.Object.Map(entity, dto));
+            // Act
+            var result = _mockBusinessMapper.Object.Map(entity, dto);
+
+            // Assert
+            Assert.Equal(dto, result);
         }
     }
 }

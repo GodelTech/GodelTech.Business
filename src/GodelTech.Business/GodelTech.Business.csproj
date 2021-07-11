@@ -1,36 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageId>GodelTech.Business</PackageId>
-    <VersionPrefix>1.1.0</VersionPrefix>
-    <Authors>v.rodchenko</Authors>
-    <Company>Godel Technologies</Company>
-    <Description>Library for services in business layer.</Description>
-    <Copyright>Godel Technologies 2020</Copyright>
-    <PackageLicenseUrl>https://github.com/GodelTech/GodelTech.Business/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/GodelTech/GodelTech.Business/wiki</PackageProjectUrl>
-    <PackageIconUrl>https://www.gravatar.com/avatar/839234621070de51e7b9cabd5ceee8fe?s=64</PackageIconUrl>
-    <RepositoryUrl>https://github.com/GodelTech/GodelTech.Business</RepositoryUrl>
-    <PackageTags>Service Business Layer</PackageTags>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<PackageId>GodelTech.Business</PackageId>
+		<VersionPrefix>2.0.0</VersionPrefix>
+		<Authors>v.rodchenko</Authors>
+		<Company>Godel Technologies</Company>
+		<Description>Library for services in business layer.</Description>
+		<Copyright>Godel Technologies 2020</Copyright>
+		<PackageLicenseUrl>https://github.com/GodelTech/GodelTech.Business/blob/master/LICENSE</PackageLicenseUrl>
+		<PackageProjectUrl>https://github.com/GodelTech/GodelTech.Business/wiki</PackageProjectUrl>
+		<PackageIconUrl>https://www.gravatar.com/avatar/839234621070de51e7b9cabd5ceee8fe?s=64</PackageIconUrl>
+		<RepositoryUrl>https://github.com/GodelTech/GodelTech.Business</RepositoryUrl>
+		<PackageTags>Service Business Layer</PackageTags>
 
-    <!-- XML documentation -->
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<!-- XML documentation -->
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 
-    <!-- Source Link needs this -->
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<!-- Source Link needs this -->
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
-    <!-- SonarQube needs this -->
-    <ProjectGuid>{00000000-0000-0000-0000-000000000001}</ProjectGuid>
-  </PropertyGroup>
+		<!-- SonarQube needs this -->
+		<ProjectGuid>{00000000-0000-0000-0000-000000000001}</ProjectGuid>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <!-- Source Link needs this -->
-    <PackageReference Include="GodelTech.Data" Version="3.0.1" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
-  </ItemGroup>
+	<ItemGroup>
+		<!-- Source Link needs this -->
+		<PackageReference Include="GodelTech.Data" Version="3.0.6" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+	</ItemGroup>
 
 </Project>
