@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-[assembly: CLSCompliant(true)]
 namespace GodelTech.Business
 {
     /// <summary>
