@@ -14,6 +14,8 @@
 		<RepositoryUrl>https://github.com/GodelTech/GodelTech.Business</RepositoryUrl>
 		<PackageTags>Service Business Layer</PackageTags>
 
+		<AnalysisMode>AllEnabledByDefault</AnalysisMode>
+
 		<!-- XML documentation -->
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 
@@ -29,7 +31,6 @@
 
 	<ItemGroup>
 		<!-- Source Link needs this -->
-		<PackageReference Include="GodelTech.Data" Version="3.0.6" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
 	</ItemGroup>
 
