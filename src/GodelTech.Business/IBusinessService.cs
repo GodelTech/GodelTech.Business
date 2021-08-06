@@ -9,13 +9,13 @@ namespace GodelTech.Business
     /// <typeparam name="TDto">The type of the T data transfer object.</typeparam>
     /// <typeparam name="TAddDto">The type of the T type.</typeparam>
     /// <typeparam name="TEditDto">The type of the T type.</typeparam>
-    /// <typeparam name="TType">The type of the T type.</typeparam>
+    /// <typeparam name="TKey">The type of the T key.</typeparam>
 #pragma warning disable S2436 // Reduce the number of generic parameters in the 'IBusinessService' interface to no more than the 2 authorized.
-    public interface IBusinessService<TDto, in TAddDto, in TEditDto, in TType>
+    public interface IBusinessService<TDto, in TAddDto, in TEditDto, in TKey>
 #pragma warning restore S2436 // Reduce the number of generic parameters in the 'IBusinessService' interface to no more than the 2 authorized.
-        where TDto : class, IDto<TType>
+        where TDto : class, IDto<TKey>
         where TAddDto : class
-        where TEditDto : class, IDto<TType>
+        where TEditDto : class, IDto<TKey>
     {
         /// <summary>
         /// Asynchronously gets data transfer object models of type T data transfer object.
@@ -29,7 +29,7 @@ namespace GodelTech.Business
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns><cref>Task{TDto}</cref>.</returns>
-        Task<TDto> GetAsync(TType id);
+        Task<TDto> GetAsync(TKey id);
 
         /// <summary>
         /// Asynchronously adds data transfer object.
@@ -49,6 +49,6 @@ namespace GodelTech.Business
         /// Asynchronously deletes the specified data transfer object.
         /// </summary>
         /// <param name="id">The identifier.</param>
-        Task<bool> DeleteAsync(TType id);
+        Task<bool> DeleteAsync(TKey id);
     }
 }

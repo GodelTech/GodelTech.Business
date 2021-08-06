@@ -3,13 +3,13 @@
     /// <summary>
     /// Data transfer object.
     /// </summary>
-    /// <typeparam name="TType">The type of the T type.</typeparam>
-    public class Dto<TType> : IDto<TType>
+    /// <typeparam name="TKey">The type of the T key.</typeparam>
+    public class Dto<TKey> : IDto<TKey>
     {
         /// <summary>
         /// Gets or sets the identifier.
         /// </summary>
         /// <value>The identifier.</value>
-        public virtual TType Id { get; set; }
+        public virtual TKey Id { get; set; }
     }
 }

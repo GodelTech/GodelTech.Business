@@ -21,6 +21,8 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
+		<PackageReference Include="Moq" Version="4.16.1" />
+		<PackageReference Include="Neleus.LambdaCompare" Version="1.0.3" />
 		<PackageReference Include="xunit" Version="2.4.1" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
 			<PrivateAssets>all</PrivateAssets>
@@ -30,6 +32,21 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\src\GodelTech.Business\GodelTech.Business.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="BusinessServiceAsyncTests.*.cs">
+			<DependentUpon>BusinessServiceAsyncTests.cs</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="BusinessServiceAsyncTests - Copy.Get.cs">
+	    <DependentUpon>BusinessServiceAsyncTests.cs</DependentUpon>
+	  </Compile>
+	  <Compile Update="BusinessServiceAsyncTests - Copy.GetList.cs">
+	    <DependentUpon>BusinessServiceAsyncTests.cs</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 </Project>

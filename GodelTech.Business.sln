@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GodelTech.Business", "src\G
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GodelTech.Business.Tests", "test\GodelTech.Business.Tests\GodelTech.Business.Tests.csproj", "{00000000-0000-0000-0000-000000000002}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GodelTech.Business.IntegrationTests", "test\GodelTech.Business.IntegrationTests\GodelTech.Business.IntegrationTests.csproj", "{562316B6-5478-45CE-B1F4-4CB5F7287696}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,10 +25,6 @@ Global
 		{00000000-0000-0000-0000-000000000002}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00000000-0000-0000-0000-000000000002}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00000000-0000-0000-0000-000000000002}.Release|Any CPU.Build.0 = Release|Any CPU
-		{562316B6-5478-45CE-B1F4-4CB5F7287696}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{562316B6-5478-45CE-B1F4-4CB5F7287696}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{562316B6-5478-45CE-B1F4-4CB5F7287696}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{562316B6-5478-45CE-B1F4-4CB5F7287696}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -38,7 +32,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{00000000-0000-0000-0000-000000000001} = {BB4D6FA0-8906-43A2-ABE9-02B1D6FBE7BD}
 		{00000000-0000-0000-0000-000000000002} = {64C7BB74-0969-475B-A9BC-8130CADF3968}
-		{562316B6-5478-45CE-B1F4-4CB5F7287696} = {64C7BB74-0969-475B-A9BC-8130CADF3968}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {28DC63D1-17BE-4368-9576-6C9CB30A05FB}

@@ -12,26 +12,26 @@ namespace GodelTech.Business
     /// Business service.
     /// </summary>
     /// <typeparam name="TEntity">The type of the T entity.</typeparam>
-    /// <typeparam name="TType">The type of the T type.</typeparam>
+    /// <typeparam name="TKey">The type of the T key.</typeparam>
     /// <typeparam name="TUnitOfWork">The type of the T UnitOfWork.</typeparam>
     /// <typeparam name="TDto">The type of the T data transfer object.</typeparam>
     /// <typeparam name="TAddDto">The type of the T add data transfer object.</typeparam>
     /// <typeparam name="TEditDto">The type of the T edit data transfer object.</typeparam>
 #pragma warning disable S2436 // Reduce the number of generic parameters in the 'BusinessService' class to no more than the 2 authorized.
-    public abstract class BusinessService<TEntity, TType, TUnitOfWork, TDto, TAddDto, TEditDto>
+    public abstract class BusinessService<TEntity, TKey, TUnitOfWork, TDto, TAddDto, TEditDto>
 #pragma warning restore S2436 // Reduce the number of generic parameters in the 'BusinessService' class to no more than the 2 authorized.
-        : IBusinessService<TDto, TAddDto, TEditDto, TType>
-        where TEntity : class, IEntity<TType>
+        : IBusinessService<TDto, TAddDto, TEditDto, TKey>
+        where TEntity : class, IEntity<TKey>
         where TUnitOfWork : class, IUnitOfWork
-        where TDto : class, IDto<TType>
+        where TDto : class, IDto<TKey>
         where TAddDto : class
-        where TEditDto : class, IDto<TType>
+        where TEditDto : class, IDto<TKey>
     {
-        private readonly Func<TUnitOfWork, IRepository<TEntity, TType>> _repositorySelector;
+        private readonly Func<TUnitOfWork, IRepository<TEntity, TKey>> _repositorySelector;
         private readonly IBusinessMapper _businessMapper;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BusinessService{TEntity, TType, TUnitOfWork, TDto, TAddDto, TEditDto}"/> class.
+        /// Initializes a new instance of the <see cref="BusinessService{TEntity, TKey, TUnitOfWork, TDto, TAddDto, TEditDto}"/> class.
         /// </summary>
         /// <param name="unitOfWork">The UnitOfWork.</param>
         /// <param name="repositorySelector">The repository selector function.</param>
@@ -39,9 +39,9 @@ namespace GodelTech.Business
         /// <param name="logger">The logger.</param>
         protected BusinessService(
             TUnitOfWork unitOfWork,
-            Func<TUnitOfWork, IRepository<TEntity, TType>> repositorySelector,
+            Func<TUnitOfWork, IRepository<TEntity, TKey>> repositorySelector,
             IBusinessMapper businessMapper,
-            ILogger<BusinessService<TEntity, TType, TUnitOfWork, TDto, TAddDto, TEditDto>> logger)
+            ILogger logger)
         {
             UnitOfWork = unitOfWork;
             _repositorySelector = repositorySelector;
@@ -57,12 +57,12 @@ namespace GodelTech.Business
         /// <summary>
         /// Repository.
         /// </summary>
-        protected IRepository<TEntity, TType> Repository => _repositorySelector(UnitOfWork);
+        protected IRepository<TEntity, TKey> Repository => _repositorySelector(UnitOfWork);
 
         /// <summary>
         /// Logger.
         /// </summary>
-        protected ILogger<BusinessService<TEntity, TType, TUnitOfWork, TDto, TAddDto, TEditDto>> Logger { get; }
+        protected ILogger Logger { get; }
 
         /// <summary>
         /// Asynchronously gets data transfer object models of type T data transfer object.
@@ -71,7 +71,7 @@ namespace GodelTech.Business
         public async Task<IList<TDto>> GetListAsync()
         {
             return await Repository
-                .GetListAsync<TDto, TEntity, TType>();
+                .GetListAsync<TDto, TEntity, TKey>();
         }
 
         /// <summary>
@@ -80,10 +80,10 @@ namespace GodelTech.Business
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns><cref>Task{TDto}</cref>.</returns>
-        public async Task<TDto> GetAsync(TType id)
+        public async Task<TDto> GetAsync(TKey id)
         {
             return await Repository
-                .GetAsync<TDto, TEntity, TType>(id);
+                .GetAsync<TDto, TEntity, TKey>(id);
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace GodelTech.Business
         /// Asynchronously deletes the specified data transfer object.
         /// </summary>
         /// <param name="id">The identifier.</param>
-        public async Task<bool> DeleteAsync(TType id)
+        public async Task<bool> DeleteAsync(TKey id)
         {
             Logger.LogInformation($"Delete item: {id}");
 
