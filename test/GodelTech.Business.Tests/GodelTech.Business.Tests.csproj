@@ -40,13 +40,4 @@
 		</Compile>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Compile Update="BusinessServiceAsyncTests - Copy.Get.cs">
-	    <DependentUpon>BusinessServiceAsyncTests.cs</DependentUpon>
-	  </Compile>
-	  <Compile Update="BusinessServiceAsyncTests - Copy.GetList.cs">
-	    <DependentUpon>BusinessServiceAsyncTests.cs</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-
 </Project>

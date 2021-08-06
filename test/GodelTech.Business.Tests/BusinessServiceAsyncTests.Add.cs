@@ -13,6 +13,31 @@ namespace GodelTech.Business.Tests
 {
     public partial class BusinessServiceAsyncTests
     {
+        [Theory]
+        [MemberData(nameof(TypesMemberData))]
+        public async Task AddAsync_ThrowsArgumentNullException<TKey>(
+            TKey defaultKey)
+        {
+            // Arrange
+            var mockRepository = new Mock<IRepository<FakeEntity<TKey>, TKey>>(MockBehavior.Strict);
+
+            var businessService = new FakeBusinessService<TKey>(
+                _mockUnitOfWork.Object,
+                _ => mockRepository.Object,
+                _mockBusinessMapper.Object,
+                _mockLogger.Object
+            );
+
+            // Act & Assert
+            Assert.NotNull(defaultKey);
+
+            var exception = await Assert.ThrowsAsync<ArgumentNullException>(
+                () => businessService.AddAsync(null)
+            );
+
+            Assert.Equal("item", exception.ParamName);
+        }
+
         public static IEnumerable<object[]> AddMemberData =>
             new Collection<object[]>
             {

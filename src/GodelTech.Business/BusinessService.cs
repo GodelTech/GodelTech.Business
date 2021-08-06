@@ -91,19 +91,11 @@ namespace GodelTech.Business
         /// </summary>
         /// <param name="item">The item.</param>
         /// <returns><cref>TDto</cref>.</returns>
-        public async Task<TDto> AddAsync(TAddDto item)
+        public Task<TDto> AddAsync(TAddDto item)
         {
-            Logger.LogInformation($"Add item: {item}");
+            if (item == null) throw new ArgumentNullException(nameof(item));
 
-            var entity = _businessMapper.Map<TAddDto, TEntity>(item);
-
-            entity = await Repository
-                .InsertAsync(entity);
-
-            Logger.LogInformation("Save changes");
-            await UnitOfWork.CommitAsync();
-
-            return _businessMapper.Map<TEntity, TDto>(entity);
+            return AddInternalAsync(item);
         }
 
         /// <summary>
@@ -132,6 +124,21 @@ namespace GodelTech.Business
             var result = await UnitOfWork.CommitAsync();
 
             return result == 1;
+        }
+
+        private async Task<TDto> AddInternalAsync(TAddDto item)
+        {
+            Logger.LogInformation($"Add item: {item}");
+
+            var entity = _businessMapper.Map<TAddDto, TEntity>(item);
+
+            entity = await Repository
+                .InsertAsync(entity);
+
+            Logger.LogInformation("Save changes");
+            await UnitOfWork.CommitAsync();
+
+            return _businessMapper.Map<TEntity, TDto>(entity);
         }
 
         private async Task<TDto> EditInternalAsync(TEditDto item)
