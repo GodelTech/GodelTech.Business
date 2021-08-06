@@ -12,6 +12,7 @@ namespace GodelTech.Business
     /// <typeparam name="TAddDto">The type of the T type.</typeparam>
     /// <typeparam name="TEditDto">The type of the T type.</typeparam>
     /// <typeparam name="TType">The type of the T type.</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarCloud", "S2436:Reduce the number of generic parameters in the 'IBusinessService' interface to no more than the 2 authorized.", Justification = "<Pending>")]
     public interface IBusinessService<TDto, in TAddDto, in TEditDto, in TType>
         where TDto : class, IDto<TType>
         where TAddDto : class
