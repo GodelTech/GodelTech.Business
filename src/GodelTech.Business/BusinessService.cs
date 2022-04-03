@@ -17,9 +17,7 @@ namespace GodelTech.Business
     /// <typeparam name="TDto">The type of the T data transfer object.</typeparam>
     /// <typeparam name="TAddDto">The type of the T add data transfer object.</typeparam>
     /// <typeparam name="TEditDto">The type of the T edit data transfer object.</typeparam>
-#pragma warning disable S2436 // Reduce the number of generic parameters in the 'BusinessService' class to no more than the 2 authorized.
     public abstract class BusinessService<TEntity, TKey, TUnitOfWork, TDto, TAddDto, TEditDto>
-#pragma warning restore S2436 // Reduce the number of generic parameters in the 'BusinessService' class to no more than the 2 authorized.
         : IBusinessService<TDto, TAddDto, TEditDto, TKey>
         where TEntity : class, IEntity<TKey>
         where TUnitOfWork : class, IUnitOfWork
@@ -110,15 +108,15 @@ namespace GodelTech.Business
             return EditInternalAsync(item);
         }
 
-        private static readonly Action<ILogger, TKey, Exception> LogDeleteAsyncDeleteItemInformationCallback
-            = LoggerMessage.Define<TKey>(
+        private static readonly Action<ILogger, TKey, Exception> LogDeleteAsyncDeleteItemInformationCallback = 
+            LoggerMessage.Define<TKey>(
                 LogLevel.Information,
                 new EventId(0, nameof(DeleteAsync)),
                 "Delete item: {Id}"
             );
 
-        private static readonly Action<ILogger, Exception> LogDeleteAsyncSaveChangesInformationCallback
-            = LoggerMessage.Define(
+        private readonly Action<ILogger, Exception> _logDeleteAsyncSaveChangesInformationCallback = 
+            LoggerMessage.Define(
                 LogLevel.Information,
                 new EventId(0, nameof(DeleteAsync)),
                 "Save changes"
@@ -139,22 +137,22 @@ namespace GodelTech.Business
 
             if (Logger.IsEnabled(LogLevel.Information))
             {
-                LogDeleteAsyncSaveChangesInformationCallback(Logger, null);
+                _logDeleteAsyncSaveChangesInformationCallback(Logger, null);
             }
             var result = await UnitOfWork.CommitAsync();
 
             return result == 1;
         }
 
-        private static readonly Action<ILogger, TAddDto, Exception> LogAddInternalAsyncAddItemInformationCallback
-            = LoggerMessage.Define<TAddDto>(
+        private static readonly Action<ILogger, TAddDto, Exception> LogAddInternalAsyncAddItemInformationCallback =
+            LoggerMessage.Define<TAddDto>(
                 LogLevel.Information,
                 new EventId(0, nameof(AddInternalAsync)),
                 "Add item: {Item}"
             );
 
-        private static readonly Action<ILogger, Exception> LogAddInternalAsyncSaveChangesInformationCallback
-            = LoggerMessage.Define(
+        private Action<ILogger, Exception> LogAddInternalAsyncSaveChangesInformationCallback { get; } = 
+            LoggerMessage.Define(
                 LogLevel.Information,
                 new EventId(0, nameof(AddInternalAsync)),
                 "Save changes"
@@ -190,15 +188,15 @@ namespace GodelTech.Business
             );
 
 
-        private static readonly Action<ILogger, TKey, Exception> LogEditInternalAsyncItemNotFoundWarningCallback
-            = LoggerMessage.Define<TKey>(
+        private static readonly Action<ILogger, TKey, Exception> LogEditInternalAsyncItemNotFoundWarningCallback = 
+            LoggerMessage.Define<TKey>(
                 LogLevel.Warning,
                 new EventId(0, nameof(EditInternalAsync)),
                 "Item not found: {Item}"
             );
 
-        private static readonly Action<ILogger, Exception> LogEditInternalAsyncSaveChangesInformationCallback
-            = LoggerMessage.Define(
+        private Action<ILogger, Exception> LogEditInternalAsyncSaveChangesInformationCallback { get; } =
+            LoggerMessage.Define(
                 LogLevel.Information,
                 new EventId(0, nameof(EditInternalAsync)),
                 "Save changes"
