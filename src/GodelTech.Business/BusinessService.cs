@@ -110,56 +110,133 @@ namespace GodelTech.Business
             return EditInternalAsync(item);
         }
 
+        private static readonly Action<ILogger, TKey, Exception> LogDeleteAsyncDeleteItemInformationCallback
+            = LoggerMessage.Define<TKey>(
+                LogLevel.Information,
+                new EventId(0, nameof(DeleteAsync)),
+                "Delete item: {Id}"
+            );
+
+        private static readonly Action<ILogger, Exception> LogDeleteAsyncSaveChangesInformationCallback
+            = LoggerMessage.Define(
+                LogLevel.Information,
+                new EventId(0, nameof(DeleteAsync)),
+                "Save changes"
+            );
+
         /// <summary>
         /// Asynchronously deletes the specified data transfer object.
         /// </summary>
         /// <param name="id">The identifier.</param>
         public async Task<bool> DeleteAsync(TKey id)
         {
-            Logger.LogInformation($"Delete item: {id}");
+            if (Logger.IsEnabled(LogLevel.Information))
+            {
+                LogDeleteAsyncDeleteItemInformationCallback(Logger, id, null);
+            }
 
             Repository.Delete(id);
 
-            Logger.LogInformation("Save changes");
+            if (Logger.IsEnabled(LogLevel.Information))
+            {
+                LogDeleteAsyncSaveChangesInformationCallback(Logger, null);
+            }
             var result = await UnitOfWork.CommitAsync();
 
             return result == 1;
         }
 
+        private static readonly Action<ILogger, TAddDto, Exception> LogAddInternalAsyncAddItemInformationCallback
+            = LoggerMessage.Define<TAddDto>(
+                LogLevel.Information,
+                new EventId(0, nameof(AddInternalAsync)),
+                "Add item: {Item}"
+            );
+
+        private static readonly Action<ILogger, Exception> LogAddInternalAsyncSaveChangesInformationCallback
+            = LoggerMessage.Define(
+                LogLevel.Information,
+                new EventId(0, nameof(AddInternalAsync)),
+                "Save changes"
+            );
+
         private async Task<TDto> AddInternalAsync(TAddDto item)
         {
-            Logger.LogInformation($"Add item: {item}");
+            if (Logger.IsEnabled(LogLevel.Information))
+            {
+                LogAddInternalAsyncAddItemInformationCallback(Logger, item, null);
+            }
 
             var entity = _businessMapper.Map<TAddDto, TEntity>(item);
 
             entity = await Repository
                 .InsertAsync(entity);
 
-            Logger.LogInformation("Save changes");
+            if (Logger.IsEnabled(LogLevel.Information))
+            {
+                LogAddInternalAsyncSaveChangesInformationCallback(Logger, null);
+            }
+
             await UnitOfWork.CommitAsync();
 
             return _businessMapper.Map<TEntity, TDto>(entity);
         }
 
+        private static readonly Action<ILogger, TEditDto, Exception> LogEditInternalAsyncEditItemInformationCallback
+            = LoggerMessage.Define<TEditDto>(
+                LogLevel.Information,
+                new EventId(0, nameof(EditInternalAsync)),
+                "Edit item: {Item}"
+            );
+
+
+        private static readonly Action<ILogger, TKey, Exception> LogEditInternalAsyncItemNotFoundWarningCallback
+            = LoggerMessage.Define<TKey>(
+                LogLevel.Warning,
+                new EventId(0, nameof(EditInternalAsync)),
+                "Item not found: {Item}"
+            );
+
+        private static readonly Action<ILogger, Exception> LogEditInternalAsyncSaveChangesInformationCallback
+            = LoggerMessage.Define(
+                LogLevel.Information,
+                new EventId(0, nameof(EditInternalAsync)),
+                "Save changes"
+            );
+
         private async Task<TDto> EditInternalAsync(TEditDto item)
         {
-            Logger.LogInformation($"Edit item: {item}");
+            if (Logger.IsEnabled(LogLevel.Information))
+            {
+                LogEditInternalAsyncEditItemInformationCallback(Logger, item, null);
+            }
 
             var entity = await Repository
                 .GetAsync(item.Id);
 
             if (entity == null)
             {
-                Logger.LogWarning($"Item not found: {item.Id}");
+                if (Logger.IsEnabled(LogLevel.Warning))
+                {
+                    LogEditInternalAsyncItemNotFoundWarningCallback(
+                        Logger,
+                        item.Id,
+                        null
+                    );
+                }
+
                 return null;
             }
 
             _businessMapper.Map(item, entity);
 
-            entity = Repository
-                .Update(entity);
+            entity = Repository.Update(entity);
 
-            Logger.LogInformation("Save changes");
+            if (Logger.IsEnabled(LogLevel.Information))
+            {
+                LogEditInternalAsyncSaveChangesInformationCallback(Logger, null);
+            }
+
             await UnitOfWork.CommitAsync();
 
             return _businessMapper.Map<TEntity, TDto>(entity);
