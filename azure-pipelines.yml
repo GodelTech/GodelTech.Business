@@ -15,10 +15,10 @@ resources:
       type: github
       endpoint: 'godeltech'
       name: 'GodelTech/AzureDevOps.Pipeline.Templates'
-      ref: 'refs/tags/v5.0.1'
+      ref: 'refs/tags/latest'
 
 extends:
-  template: '.NET Core/NuGet.yml@GodelTech'
+  template: '.NET/NuGet.yml@GodelTech'
   parameters:
     sonarCloudOrganizationName: 'godeltech'
     artifactPackDirectory: 'packages'
