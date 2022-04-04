@@ -17,7 +17,9 @@ namespace GodelTech.Business
     /// <typeparam name="TDto">The type of the T data transfer object.</typeparam>
     /// <typeparam name="TAddDto">The type of the T add data transfer object.</typeparam>
     /// <typeparam name="TEditDto">The type of the T edit data transfer object.</typeparam>
+#pragma warning disable S2436 // Reduce the number of generic parameters in the 'BusinessService' class to no more than the 2 authorized.
     public abstract class BusinessService<TEntity, TKey, TUnitOfWork, TDto, TAddDto, TEditDto>
+#pragma warning restore S2436 // Reduce the number of generic parameters in the 'BusinessService' class to no more than the 2 authorized.
         : IBusinessService<TDto, TAddDto, TEditDto, TKey>
         where TEntity : class, IEntity<TKey>
         where TUnitOfWork : class, IUnitOfWork
