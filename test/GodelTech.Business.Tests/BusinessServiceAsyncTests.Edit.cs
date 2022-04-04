@@ -61,6 +61,12 @@ namespace GodelTech.Business.Tests
                 null,
                 It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)
             );
+            _mockLogger
+                .Setup(x => x.IsEnabled(LogLevel.Information))
+                .Returns(true);
+            _mockLogger
+                .Setup(x => x.IsEnabled(LogLevel.Warning))
+                .Returns(true);
             _mockLogger.Setup(loggerExpressionEdit);
 
             var filterExpression = FilterExpressionExtensions.CreateIdFilterExpression<FakeEntity<TKey>, TKey>(defaultKey);
@@ -240,6 +246,9 @@ namespace GodelTech.Business.Tests
                 null,
                 It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)
             );
+            _mockLogger
+                .Setup(x => x.IsEnabled(LogLevel.Information))
+                .Returns(true);
             _mockLogger.Setup(loggerExpressionEdit);
 
             var filterExpression = FilterExpressionExtensions.CreateIdFilterExpression<FakeEntity<TKey>, TKey>(defaultKey);

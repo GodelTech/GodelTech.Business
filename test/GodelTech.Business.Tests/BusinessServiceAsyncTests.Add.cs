@@ -171,6 +171,9 @@ namespace GodelTech.Business.Tests
                 null,
                 It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)
             );
+            _mockLogger
+                .Setup(x => x.IsEnabled(LogLevel.Information))
+                .Returns(true);
             _mockLogger.Setup(loggerExpressionSave);
 
             _mockUnitOfWork
