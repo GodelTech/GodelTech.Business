@@ -178,7 +178,6 @@ namespace GodelTech.Business
                 "Edit item: {Item}"
             );
 
-
         private static readonly Action<ILogger, TKey, Exception> LogEditInternalAsyncItemNotFoundWarningCallback = 
             LoggerMessage.Define<TKey>(
                 LogLevel.Warning,
