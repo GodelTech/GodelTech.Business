@@ -128,17 +128,12 @@ namespace GodelTech.Business
         /// <param name="id">The identifier.</param>
         public async Task<bool> DeleteAsync(TKey id)
         {
-            if (Logger.IsEnabled(LogLevel.Information))
-            {
-                LogDeleteAsyncDeleteItemInformationCallback(Logger, id, null);
-            }
+            LogDeleteAsyncDeleteItemInformationCallback(Logger, id, null);
 
             Repository.Delete(id);
+            
+            _logDeleteAsyncSaveChangesInformationCallback(Logger, null);
 
-            if (Logger.IsEnabled(LogLevel.Information))
-            {
-                _logDeleteAsyncSaveChangesInformationCallback(Logger, null);
-            }
             var result = await UnitOfWork.CommitAsync();
 
             return result == 1;
@@ -160,28 +155,22 @@ namespace GodelTech.Business
 
         private async Task<TDto> AddInternalAsync(TAddDto item)
         {
-            if (Logger.IsEnabled(LogLevel.Information))
-            {
-                LogAddInternalAsyncAddItemInformationCallback(Logger, item, null);
-            }
+            LogAddInternalAsyncAddItemInformationCallback(Logger, item, null);
 
             var entity = _businessMapper.Map<TAddDto, TEntity>(item);
 
             entity = await Repository
                 .InsertAsync(entity);
 
-            if (Logger.IsEnabled(LogLevel.Information))
-            {
-                LogAddInternalAsyncSaveChangesInformationCallback(Logger, null);
-            }
+            LogAddInternalAsyncSaveChangesInformationCallback(Logger, null);
 
             await UnitOfWork.CommitAsync();
 
             return _businessMapper.Map<TEntity, TDto>(entity);
         }
 
-        private static readonly Action<ILogger, TEditDto, Exception> LogEditInternalAsyncEditItemInformationCallback
-            = LoggerMessage.Define<TEditDto>(
+        private static readonly Action<ILogger, TEditDto, Exception> LogEditInternalAsyncEditItemInformationCallback = 
+            LoggerMessage.Define<TEditDto>(
                 LogLevel.Information,
                 new EventId(0, nameof(EditInternalAsync)),
                 "Edit item: {Item}"
@@ -204,25 +193,14 @@ namespace GodelTech.Business
 
         private async Task<TDto> EditInternalAsync(TEditDto item)
         {
-            if (Logger.IsEnabled(LogLevel.Information))
-            {
-                LogEditInternalAsyncEditItemInformationCallback(Logger, item, null);
-            }
+            LogEditInternalAsyncEditItemInformationCallback(Logger, item, null);
 
             var entity = await Repository
                 .GetAsync(item.Id);
 
             if (entity == null)
             {
-                if (Logger.IsEnabled(LogLevel.Warning))
-                {
-                    LogEditInternalAsyncItemNotFoundWarningCallback(
-                        Logger,
-                        item.Id,
-                        null
-                    );
-                }
-
+                LogEditInternalAsyncItemNotFoundWarningCallback(Logger, item.Id, null);
                 return null;
             }
 
@@ -230,10 +208,7 @@ namespace GodelTech.Business
 
             entity = Repository.Update(entity);
 
-            if (Logger.IsEnabled(LogLevel.Information))
-            {
-                LogEditInternalAsyncSaveChangesInformationCallback(Logger, null);
-            }
+            LogEditInternalAsyncSaveChangesInformationCallback(Logger, null);
 
             await UnitOfWork.CommitAsync();
 
