@@ -110,14 +110,14 @@ namespace GodelTech.Business
             return EditInternalAsync(item);
         }
 
-        private static readonly Action<ILogger, TKey, Exception> LogDeleteAsyncDeleteItemInformationCallback = 
+        private static readonly Action<ILogger, TKey, Exception> LogDeleteAsyncDeleteItemInformationCallback =
             LoggerMessage.Define<TKey>(
                 LogLevel.Information,
                 new EventId(0, nameof(DeleteAsync)),
                 "Delete item: {Id}"
             );
 
-        private readonly Action<ILogger, Exception> _logDeleteAsyncSaveChangesInformationCallback = 
+        private readonly Action<ILogger, Exception> _logDeleteAsyncSaveChangesInformationCallback =
             LoggerMessage.Define(
                 LogLevel.Information,
                 new EventId(0, nameof(DeleteAsync)),
@@ -133,7 +133,7 @@ namespace GodelTech.Business
             LogDeleteAsyncDeleteItemInformationCallback(Logger, id, null);
 
             Repository.Delete(id);
-            
+
             _logDeleteAsyncSaveChangesInformationCallback(Logger, null);
 
             var result = await UnitOfWork.CommitAsync();
@@ -148,7 +148,7 @@ namespace GodelTech.Business
                 "Add item: {Item}"
             );
 
-        private Action<ILogger, Exception> LogAddInternalAsyncSaveChangesInformationCallback { get; } = 
+        private Action<ILogger, Exception> LogAddInternalAsyncSaveChangesInformationCallback { get; } =
             LoggerMessage.Define(
                 LogLevel.Information,
                 new EventId(0, nameof(AddInternalAsync)),
@@ -171,14 +171,14 @@ namespace GodelTech.Business
             return _businessMapper.Map<TEntity, TDto>(entity);
         }
 
-        private static readonly Action<ILogger, TEditDto, Exception> LogEditInternalAsyncEditItemInformationCallback = 
+        private static readonly Action<ILogger, TEditDto, Exception> LogEditInternalAsyncEditItemInformationCallback =
             LoggerMessage.Define<TEditDto>(
                 LogLevel.Information,
                 new EventId(0, nameof(EditInternalAsync)),
                 "Edit item: {Item}"
             );
 
-        private static readonly Action<ILogger, TKey, Exception> LogEditInternalAsyncItemNotFoundWarningCallback = 
+        private static readonly Action<ILogger, TKey, Exception> LogEditInternalAsyncItemNotFoundWarningCallback =
             LoggerMessage.Define<TKey>(
                 LogLevel.Warning,
                 new EventId(0, nameof(EditInternalAsync)),
