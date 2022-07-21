@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using GodelTech.Business.Tests.Fakes;
 using GodelTech.Data;
-using GodelTech.Data.Extensions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Neleus.LambdaCompare;
@@ -21,6 +21,8 @@ namespace GodelTech.Business.Tests
             TKey defaultKey)
         {
             // Arrange
+            var cancellationToken = new CancellationToken();
+
             var mockRepository = new Mock<IRepository<FakeEntity<TKey>, TKey>>(MockBehavior.Strict);
 
             var businessService = new FakeBusinessService<TKey>(
@@ -34,7 +36,7 @@ namespace GodelTech.Business.Tests
             Assert.NotNull(defaultKey);
 
             var exception = await Assert.ThrowsAsync<ArgumentNullException>(
-                () => businessService.EditAsync(null)
+                () => businessService.EditAsync(null, cancellationToken)
             );
 
             Assert.Equal("item", exception.ParamName);
@@ -46,6 +48,8 @@ namespace GodelTech.Business.Tests
             TKey defaultKey)
         {
             // Arrange
+            var cancellationToken = new CancellationToken();
+
             var item = new FakeEditDto<TKey>
             {
                 Id = defaultKey
@@ -82,7 +86,8 @@ namespace GodelTech.Business.Tests
                                  )
                                  && y.Sort == null
                                  && y.Page == null
-                        )
+                        ),
+                        cancellationToken
                     )
                 )
                 .ReturnsAsync(() => null);
@@ -107,7 +112,7 @@ namespace GodelTech.Business.Tests
             );
 
             // Act
-            var result = await businessService.EditAsync(item);
+            var result = await businessService.EditAsync(item, cancellationToken);
 
             // Assert
             _mockLogger.Verify(loggerExpressionEdit, Times.Once);
@@ -122,7 +127,8 @@ namespace GodelTech.Business.Tests
                                  )
                                  && y.Sort == null
                                  && y.Page == null
-                        )
+                        ),
+                        cancellationToken
                     ),
                     Times.Once
                 );
@@ -236,6 +242,8 @@ namespace GodelTech.Business.Tests
             FakeDto<TKey> expectedResult)
         {
             // Arrange
+            var cancellationToken = new CancellationToken();
+
             Expression<Action<ILogger>> loggerExpressionEdit = x => x.Log(
                 LogLevel.Information,
                 0,
@@ -264,7 +272,8 @@ namespace GodelTech.Business.Tests
                                  )
                                  && y.Sort == null
                                  && y.Page == null
-                        )
+                        ),
+                        cancellationToken
                     )
                 )
                 .ReturnsAsync(entity);
@@ -295,7 +304,7 @@ namespace GodelTech.Business.Tests
 
             _mockUnitOfWork
                 .Setup(
-                    x => x.CommitAsync()
+                    x => x.CommitAsync(cancellationToken)
                 )
                 .ReturnsAsync(1);
 
@@ -313,7 +322,7 @@ namespace GodelTech.Business.Tests
             );
 
             // Act
-            var result = await businessService.EditAsync(item);
+            var result = await businessService.EditAsync(item, cancellationToken);
 
             // Assert
             _mockLogger.Verify(loggerExpressionEdit, Times.Once);
@@ -328,7 +337,8 @@ namespace GodelTech.Business.Tests
                                  )
                                  && y.Sort == null
                                  && y.Page == null
-                        )
+                        ),
+                        cancellationToken
                     ),
                     Times.Once
                 );
@@ -349,7 +359,7 @@ namespace GodelTech.Business.Tests
 
             _mockUnitOfWork
                 .Verify(
-                    x => x.CommitAsync(),
+                    x => x.CommitAsync(cancellationToken),
                     Times.Once
                 );
 

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Threading.Tasks;
 using GodelTech.Business.Tests.Fakes;
 using GodelTech.Data;
-using GodelTech.Data.Extensions;
 using Moq;
 using Neleus.LambdaCompare;
 using Xunit;
@@ -95,6 +95,8 @@ namespace GodelTech.Business.Tests
             FakeDto<TKey> expectedResult)
         {
             // Arrange
+            var cancellationToken = new CancellationToken();
+
             var filterExpression = FilterExpressionExtensions.CreateIdFilterExpression<FakeEntity<TKey>, TKey>(defaultKey);
 
             var mockRepository = new Mock<IRepository<FakeEntity<TKey>, TKey>>(MockBehavior.Strict);
@@ -108,7 +110,8 @@ namespace GodelTech.Business.Tests
                                  )
                                  && y.Sort == null
                                  && y.Page == null
-                        )
+                        ),
+                        cancellationToken
                     )
                 )
                 .ReturnsAsync(item);
@@ -121,7 +124,7 @@ namespace GodelTech.Business.Tests
             );
 
             // Act
-            var result = await businessService.GetAsync(defaultKey);
+            var result = await businessService.GetAsync(defaultKey, cancellationToken);
 
             // Assert
             mockRepository
@@ -134,7 +137,8 @@ namespace GodelTech.Business.Tests
                                  )
                                  && y.Sort == null
                                  && y.Page == null
-                        )
+                        ),
+                        cancellationToken
                     ),
                     Times.Once
                 );

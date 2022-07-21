@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using GodelTech.Business.Tests.Fakes;
 using GodelTech.Data;
@@ -19,6 +20,8 @@ namespace GodelTech.Business.Tests
             TKey defaultKey)
         {
             // Arrange
+            var cancellationToken = new CancellationToken();
+
             var mockRepository = new Mock<IRepository<FakeEntity<TKey>, TKey>>(MockBehavior.Strict);
 
             var businessService = new FakeBusinessService<TKey>(
@@ -32,7 +35,7 @@ namespace GodelTech.Business.Tests
             Assert.NotNull(defaultKey);
 
             var exception = await Assert.ThrowsAsync<ArgumentNullException>(
-                () => businessService.AddAsync(null)
+                () => businessService.AddAsync(null, cancellationToken)
             );
 
             Assert.Equal("item", exception.ParamName);
@@ -136,6 +139,8 @@ namespace GodelTech.Business.Tests
             FakeDto<TKey> expectedResult)
         {
             // Arrange
+            var cancellationToken = new CancellationToken();
+
             Expression<Action<ILogger>> loggerExpressionAdd = x => x.Log(
                 LogLevel.Information,
                 0,
@@ -157,7 +162,7 @@ namespace GodelTech.Business.Tests
             var mockRepository = new Mock<IRepository<FakeEntity<TKey>, TKey>>(MockBehavior.Strict);
             mockRepository
                 .Setup(
-                    x => x.InsertAsync(entity)
+                    x => x.InsertAsync(entity, cancellationToken)
                 )
                 .ReturnsAsync(entity);
 
@@ -178,7 +183,7 @@ namespace GodelTech.Business.Tests
 
             _mockUnitOfWork
                 .Setup(
-                    x => x.CommitAsync()
+                    x => x.CommitAsync(cancellationToken)
                 )
                 .ReturnsAsync(1);
 
@@ -196,7 +201,7 @@ namespace GodelTech.Business.Tests
             );
 
             // Act
-            var result = await businessService.AddAsync(item);
+            var result = await businessService.AddAsync(item, cancellationToken);
 
             // Assert
             Assert.NotNull(defaultKey);
@@ -211,7 +216,7 @@ namespace GodelTech.Business.Tests
 
             mockRepository
                 .Verify(
-                    x => x.InsertAsync(entity),
+                    x => x.InsertAsync(entity, cancellationToken),
                     Times.Once
                 );
 
@@ -219,7 +224,7 @@ namespace GodelTech.Business.Tests
 
             _mockUnitOfWork
                 .Verify(
-                    x => x.CommitAsync(),
+                    x => x.CommitAsync(cancellationToken),
                     Times.Once
                 );
 

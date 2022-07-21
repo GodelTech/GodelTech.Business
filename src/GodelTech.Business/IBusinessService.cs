@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GodelTech.Business
@@ -20,35 +21,41 @@ namespace GodelTech.Business
         /// <summary>
         /// Asynchronously gets data transfer object models of type T data transfer object.
         /// </summary>
+        /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <returns><cref>Task{IList{TDto}}</cref>.</returns>
-        Task<IList<TDto>> GetListAsync();
+        Task<IList<TDto>> GetListAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously gets data transfer object model of type T data transfer object.
         /// If no model is found, then null is returned.
         /// </summary>
         /// <param name="id">The identifier.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <returns><cref>Task{TDto}</cref>.</returns>
-        Task<TDto> GetAsync(TKey id);
+        Task<TDto> GetAsync(TKey id, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously adds data transfer object.
         /// </summary>
         /// <param name="item">The item.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <returns><cref>TDto</cref>.</returns>
-        Task<TDto> AddAsync(TAddDto item);
+        Task<TDto> AddAsync(TAddDto item, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously updates data transfer object.
         /// </summary>
         /// <param name="item">The item.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <returns>TDto.</returns>
-        Task<TDto> EditAsync(TEditDto item);
+        Task<TDto> EditAsync(TEditDto item, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously deletes the specified data transfer object.
         /// </summary>
         /// <param name="id">The identifier.</param>
-        Task<bool> DeleteAsync(TKey id);
+        /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
+        /// <returns>Boolean result.</returns>
+        Task<bool> DeleteAsync(TKey id, CancellationToken cancellationToken = default);
     }
 }

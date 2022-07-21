@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Threading.Tasks;
 using GodelTech.Business.Tests.Fakes;
 using GodelTech.Data;
@@ -147,10 +148,12 @@ namespace GodelTech.Business.Tests
             Collection<FakeDto<TKey>> expectedResult)
         {
             // Arrange
+            var cancellationToken = new CancellationToken();
+
             var mockRepository = new Mock<IRepository<FakeEntity<TKey>, TKey>>(MockBehavior.Strict);
             mockRepository
                 .Setup(
-                    x => x.GetListAsync<FakeDto<TKey>>(null)
+                    x => x.GetListAsync<FakeDto<TKey>>(null, cancellationToken)
                 )
                 .ReturnsAsync(list);
 
@@ -162,14 +165,14 @@ namespace GodelTech.Business.Tests
             );
 
             // Act
-            var result = await businessService.GetListAsync();
+            var result = await businessService.GetListAsync(cancellationToken);
 
             // Assert
             Assert.NotNull(defaultKey);
 
             mockRepository
                 .Verify(
-                    x => x.GetListAsync<FakeDto<TKey>>(null),
+                    x => x.GetListAsync<FakeDto<TKey>>(null, cancellationToken),
                     Times.Once
                 );
 

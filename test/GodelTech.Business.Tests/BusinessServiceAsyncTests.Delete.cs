@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using GodelTech.Business.Tests.Fakes;
 using GodelTech.Data;
-using GodelTech.Data.Extensions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Neleus.LambdaCompare;
@@ -85,6 +85,8 @@ namespace GodelTech.Business.Tests
             bool expectedResult)
         {
             // Arrange
+            var cancellationToken = new CancellationToken();
+
             Expression<Action<ILogger>> loggerExpressionDelete = x => x.Log(
                 LogLevel.Information,
                 0,
@@ -139,7 +141,7 @@ namespace GodelTech.Business.Tests
 
             _mockUnitOfWork
                 .Setup(
-                    x => x.CommitAsync()
+                    x => x.CommitAsync(cancellationToken)
                 )
                 .ReturnsAsync(numberOfRowsAffected);
 
@@ -151,7 +153,7 @@ namespace GodelTech.Business.Tests
             );
 
             // Act
-            var result = await businessService.DeleteAsync(defaultKey);
+            var result = await businessService.DeleteAsync(defaultKey, cancellationToken);
 
             // Assert
             Assert.NotNull(defaultKey);
@@ -183,7 +185,7 @@ namespace GodelTech.Business.Tests
 
             _mockUnitOfWork
                 .Verify(
-                    x => x.CommitAsync(),
+                    x => x.CommitAsync(cancellationToken),
                     Times.Once
                 );
 
