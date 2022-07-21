@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using GodelTech.Data;
-using GodelTech.Data.Extensions;
 using Microsoft.Extensions.Logging;
 
 [assembly: CLSCompliant(false)]
@@ -67,11 +67,12 @@ namespace GodelTech.Business
         /// <summary>
         /// Asynchronously gets data transfer object models of type T data transfer object.
         /// </summary>
+        /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <returns><cref>Task{IList{TDto}}</cref>.</returns>
-        public async Task<IList<TDto>> GetListAsync()
+        public async Task<IList<TDto>> GetListAsync(CancellationToken cancellationToken = default)
         {
             return await Repository
-                .GetListAsync<TDto, TEntity, TKey>();
+                .GetListAsync<TDto, TEntity, TKey>(cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -79,35 +80,38 @@ namespace GodelTech.Business
         /// If no model is found, then null is returned.
         /// </summary>
         /// <param name="id">The identifier.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <returns><cref>Task{TDto}</cref>.</returns>
-        public async Task<TDto> GetAsync(TKey id)
+        public async Task<TDto> GetAsync(TKey id, CancellationToken cancellationToken = default)
         {
             return await Repository
-                .GetAsync<TDto, TEntity, TKey>(id);
+                .GetAsync<TDto, TEntity, TKey>(id, cancellationToken);
         }
 
         /// <summary>
         /// Asynchronously adds data transfer object.
         /// </summary>
         /// <param name="item">The item.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <returns><cref>TDto</cref>.</returns>
-        public Task<TDto> AddAsync(TAddDto item)
+        public Task<TDto> AddAsync(TAddDto item, CancellationToken cancellationToken = default)
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
 
-            return AddInternalAsync(item);
+            return AddInternalAsync(item, cancellationToken);
         }
 
         /// <summary>
         /// Asynchronously updates data transfer object.
         /// </summary>
         /// <param name="item">The item.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
         /// <returns>TDto.</returns>
-        public Task<TDto> EditAsync(TEditDto item)
+        public Task<TDto> EditAsync(TEditDto item, CancellationToken cancellationToken = default)
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
 
-            return EditInternalAsync(item);
+            return EditInternalAsync(item, cancellationToken);
         }
 
         private static readonly Action<ILogger, TKey, Exception> LogDeleteAsyncDeleteItemInformationCallback =
@@ -128,7 +132,9 @@ namespace GodelTech.Business
         /// Asynchronously deletes the specified data transfer object.
         /// </summary>
         /// <param name="id">The identifier.</param>
-        public async Task<bool> DeleteAsync(TKey id)
+        /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
+        /// <returns>Boolean result.</returns>
+        public async Task<bool> DeleteAsync(TKey id, CancellationToken cancellationToken = default)
         {
             LogDeleteAsyncDeleteItemInformationCallback(Logger, id, null);
 
@@ -136,7 +142,7 @@ namespace GodelTech.Business
 
             _logDeleteAsyncSaveChangesInformationCallback(Logger, null);
 
-            var result = await UnitOfWork.CommitAsync();
+            var result = await UnitOfWork.CommitAsync(cancellationToken);
 
             return result == 1;
         }
@@ -155,18 +161,18 @@ namespace GodelTech.Business
                 "Save changes"
             );
 
-        private async Task<TDto> AddInternalAsync(TAddDto item)
+        private async Task<TDto> AddInternalAsync(TAddDto item, CancellationToken cancellationToken = default)
         {
             LogAddInternalAsyncAddItemInformationCallback(Logger, item, null);
 
             var entity = _businessMapper.Map<TAddDto, TEntity>(item);
 
             entity = await Repository
-                .InsertAsync(entity);
+                .InsertAsync(entity, cancellationToken);
 
             LogAddInternalAsyncSaveChangesInformationCallback(Logger, null);
 
-            await UnitOfWork.CommitAsync();
+            await UnitOfWork.CommitAsync(cancellationToken);
 
             return _businessMapper.Map<TEntity, TDto>(entity);
         }
@@ -192,12 +198,12 @@ namespace GodelTech.Business
                 "Save changes"
             );
 
-        private async Task<TDto> EditInternalAsync(TEditDto item)
+        private async Task<TDto> EditInternalAsync(TEditDto item, CancellationToken cancellationToken = default)
         {
             LogEditInternalAsyncEditItemInformationCallback(Logger, item, null);
 
             var entity = await Repository
-                .GetAsync(item.Id);
+                .GetAsync(item.Id, cancellationToken);
 
             if (entity == null)
             {
@@ -211,7 +217,7 @@ namespace GodelTech.Business
 
             LogEditInternalAsyncSaveChangesInformationCallback(Logger, null);
 
-            await UnitOfWork.CommitAsync();
+            await UnitOfWork.CommitAsync(cancellationToken);
 
             return _businessMapper.Map<TEntity, TDto>(entity);
         }
