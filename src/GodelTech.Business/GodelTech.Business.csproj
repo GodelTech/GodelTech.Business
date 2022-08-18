@@ -30,7 +30,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="GodelTech.Data" Version="6.2.0" />
+		<PackageReference Include="GodelTech.Data" Version="6.3.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
 
 		<!-- Source Link needs this -->
