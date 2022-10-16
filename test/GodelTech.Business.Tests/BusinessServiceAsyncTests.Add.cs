@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentAssertions;
 using GodelTech.Business.Tests.Fakes;
 using GodelTech.Data;
 using Microsoft.Extensions.Logging;
@@ -234,7 +235,7 @@ namespace GodelTech.Business.Tests
                     Times.Once
                 );
 
-            Assert.Equal(expectedResult, result, new FakeDtoEqualityComparer<TKey>());
+            result.Should().BeEquivalentTo(expectedResult);
         }
     }
 }
