@@ -16,7 +16,7 @@ namespace GodelTech.Business.Tests
     public partial class BusinessServiceAsyncTests
     {
         [Theory]
-        [MemberData(nameof(TypesMemberData))]
+        [MemberData(nameof(BusinessServiceTests.TypesMemberData), MemberType = typeof(BusinessServiceTests))]
         public async Task AddAsync_ThrowsArgumentNullException<TKey>(
             TKey defaultKey)
         {

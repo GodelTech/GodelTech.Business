@@ -17,7 +17,7 @@ namespace GodelTech.Business.Tests
     public partial class BusinessServiceAsyncTests
     {
         [Theory]
-        [MemberData(nameof(TypesMemberData))]
+        [MemberData(nameof(BusinessServiceTests.TypesMemberData), MemberType = typeof(BusinessServiceTests))]
         public async Task EditAsync_ThrowsArgumentNullException<TKey>(
             TKey defaultKey)
         {
@@ -44,7 +44,7 @@ namespace GodelTech.Business.Tests
         }
 
         [Theory]
-        [MemberData(nameof(TypesMemberData))]
+        [MemberData(nameof(BusinessServiceTests.TypesMemberData), MemberType = typeof(BusinessServiceTests))]
         public async Task EditAsync_WhenNotFound_ReturnsNull<TKey>(
             TKey defaultKey)
         {
