@@ -27,9 +27,6 @@ namespace GodelTech.Business
         where TAddDto : class
         where TEditDto : class, IDto<TKey>
     {
-        private readonly Func<TUnitOfWork, IRepository<TEntity, TKey>> _repositorySelector;
-        private readonly IBusinessMapper _businessMapper;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="BusinessService{TEntity, TKey, TUnitOfWork, TDto, TAddDto, TEditDto}"/> class.
         /// </summary>
@@ -43,9 +40,11 @@ namespace GodelTech.Business
             IBusinessMapper businessMapper,
             ILogger logger)
         {
+            if (repositorySelector == null) throw new ArgumentNullException(nameof(repositorySelector));
+
             UnitOfWork = unitOfWork;
-            _repositorySelector = repositorySelector;
-            _businessMapper = businessMapper;
+            Repository = repositorySelector(unitOfWork);
+            BusinessMapper = businessMapper;
             Logger = logger;
         }
 
@@ -57,7 +56,13 @@ namespace GodelTech.Business
         /// <summary>
         /// Repository.
         /// </summary>
-        protected IRepository<TEntity, TKey> Repository => _repositorySelector(UnitOfWork);
+        protected IRepository<TEntity, TKey> Repository { get; }
+
+        /// <summary>
+        /// Gets the business mapper.
+        /// </summary>
+        /// <value>The business mapper.</value>
+        protected IBusinessMapper BusinessMapper { get; }
 
         /// <summary>
         /// Logger.
@@ -161,11 +166,11 @@ namespace GodelTech.Business
                 "Save changes"
             );
 
-        private async Task<TDto> AddInternalAsync(TAddDto item, CancellationToken cancellationToken = default)
+        private async Task<TDto> AddInternalAsync(TAddDto item, CancellationToken cancellationToken)
         {
             LogAddInternalAsyncAddItemInformationCallback(Logger, item, null);
 
-            var entity = _businessMapper.Map<TAddDto, TEntity>(item);
+            var entity = BusinessMapper.Map<TAddDto, TEntity>(item);
 
             entity = await Repository
                 .InsertAsync(entity, cancellationToken);
@@ -174,7 +179,7 @@ namespace GodelTech.Business
 
             await UnitOfWork.CommitAsync(cancellationToken);
 
-            return _businessMapper.Map<TEntity, TDto>(entity);
+            return BusinessMapper.Map<TEntity, TDto>(entity);
         }
 
         private static readonly Action<ILogger, TEditDto, Exception> LogEditInternalAsyncEditItemInformationCallback =
@@ -198,7 +203,7 @@ namespace GodelTech.Business
                 "Save changes"
             );
 
-        private async Task<TDto> EditInternalAsync(TEditDto item, CancellationToken cancellationToken = default)
+        private async Task<TDto> EditInternalAsync(TEditDto item, CancellationToken cancellationToken)
         {
             LogEditInternalAsyncEditItemInformationCallback(Logger, item, null);
 
@@ -211,7 +216,7 @@ namespace GodelTech.Business
                 return null;
             }
 
-            _businessMapper.Map(item, entity);
+            BusinessMapper.Map(item, entity);
 
             entity = Repository.Update(entity);
 
@@ -219,7 +224,7 @@ namespace GodelTech.Business
 
             await UnitOfWork.CommitAsync(cancellationToken);
 
-            return _businessMapper.Map<TEntity, TDto>(entity);
+            return BusinessMapper.Map<TEntity, TDto>(entity);
         }
     }
 }
