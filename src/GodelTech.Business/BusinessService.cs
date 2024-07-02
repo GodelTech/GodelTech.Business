@@ -143,7 +143,7 @@ namespace GodelTech.Business
         {
             LogDeleteAsyncDeleteItemInformationCallback(Logger, id, null);
 
-            Repository.Delete(id);
+            await Repository.DeleteAsync(id, cancellationToken);
 
             _logDeleteAsyncSaveChangesInformationCallback(Logger, null);
 
@@ -218,7 +218,7 @@ namespace GodelTech.Business
 
             BusinessMapper.Map(item, entity);
 
-            entity = Repository.Update(entity);
+            entity = await Repository.UpdateAsync(entity, cancellationToken: cancellationToken);
 
             LogEditInternalAsyncSaveChangesInformationCallback(Logger, null);
 

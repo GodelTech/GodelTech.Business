@@ -287,9 +287,9 @@ namespace GodelTech.Business.Tests
 
             mockRepository
                 .Setup(
-                    x => x.Update(entity, false)
+                    x => x.UpdateAsync(entity, false, cancellationToken)
                 )
-                .Returns(entity);
+                .ReturnsAsync(entity);
 
             Expression<Action<ILogger>> loggerExpressionSave = x => x.Log(
                 LogLevel.Information,
@@ -352,7 +352,7 @@ namespace GodelTech.Business.Tests
 
             mockRepository
                 .Verify(
-                    x => x.Update(entity, false),
+                    x => x.UpdateAsync(entity, false, cancellationToken),
                     Times.Once
                 );
 
