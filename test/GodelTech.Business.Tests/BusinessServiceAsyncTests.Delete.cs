@@ -106,7 +106,7 @@ namespace GodelTech.Business.Tests
             var mockRepository = new Mock<IRepository<FakeEntity<TKey>, TKey>>(MockBehavior.Strict);
             mockRepository
                 .Setup(
-                    x => x.Get(
+                    x => x.GetAsync(
                         It.Is<QueryParameters<FakeEntity<TKey>, TKey>>(
                             y => Lambda.Eq(
                                      y.Filter.Expression,
@@ -114,15 +114,17 @@ namespace GodelTech.Business.Tests
                                  )
                                  && y.Sort == null
                                  && y.Page == null
-                        )
+                        ),
+                        cancellationToken
                     )
                 )
-                .Returns(entity);
+                .ReturnsAsync(entity);
 
             mockRepository
                 .Setup(
-                    x => x.Delete(entity)
-                );
+                    x => x.DeleteAsync(entity, cancellationToken)
+                )
+                .Returns(() => Task.CompletedTask);
 
             Expression<Action<ILogger>> loggerExpressionSave = x => x.Log(
                 LogLevel.Information,
@@ -162,7 +164,7 @@ namespace GodelTech.Business.Tests
 
             mockRepository
                 .Verify(
-                    x => x.Get(
+                    x => x.GetAsync(
                         It.Is<QueryParameters<FakeEntity<TKey>, TKey>>(
                             y => Lambda.Eq(
                                      y.Filter.Expression,
@@ -170,14 +172,15 @@ namespace GodelTech.Business.Tests
                                  )
                                  && y.Sort == null
                                  && y.Page == null
-                        )
+                        ),
+                        cancellationToken
                     ),
                     Times.Once
                 );
 
             mockRepository
                 .Verify(
-                    x => x.Delete(entity),
+                    x => x.DeleteAsync(entity, cancellationToken),
                     Times.Once
                 );
 
