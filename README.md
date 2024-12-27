@@ -5,5 +5,5 @@ GodelTech.Business is a .NET library designed for implementing services in the b
 
 Using `IBusinessService<TDto, in TAddDto, in TEditDto, in TKey>` and `BusinessService<TEntity, TKey, TUnitOfWork, TDto, TAddDto, TEditDto>` you will get main methods e.g. GetList, Get, Add, Edit, Delete using [GodelTech.Data](https://github.com/GodelTech/GodelTech.Data) project.
 
-# License
+## License
 This project is licensed under the MIT License. See the LICENSE file for more details.
